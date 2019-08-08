@@ -19,12 +19,45 @@ export default function () {
     client.connect(CONFIG)
     client._list = client.list
     client.list = list
+    client.read = read
+    client._delete = client.delete
+    client.delete = deleteFile
     const timeout = setTimeout(() => {
       reject()
     }, 10000)
     client.on('ready', () => {
       clearTimeout(timeout)
       resolve(client)
+    })
+  })
+}
+
+function deleteFile (path) {
+  return new Promise((resolve, reject) => {
+    this._delete(path, (error) => {
+      if (error) {
+        reject(error)
+      } else {
+        resolve()
+      }
+    })
+  }) 
+}
+
+function read (path) {
+  return new Promise((resolve, reject) => {
+    this.get(path, (error, stream) => {
+      if (error) {
+        reject(error)
+      } else {
+        let result = ''
+        stream.on('data', (data) => {
+          result += data.toString()
+        })
+        stream.on('end', () => {
+          resolve(result)
+        })
+      }
     })
   })
 }

@@ -6,27 +6,20 @@ export async function handler (event) {
 
   const ftp = await FTP()
   const results = await ftp.list('/')
-  console.log(results)
+  const xmlFiles = results.filter((file) => {
+    return file.name.includes('.xml')
+  })
 
-  const xmlData = `
-    <?xml version="1.0" encoding="UTF-8"?>
-    <products>
-      <product user="1">
-        <id>1</id>
-        <name>Example product</name>
-      </product>
-    </products>
-    <users>
-      <user>
-        <id>1</id>
-        <name>Example user</name>
-      </user>
-    </users>
-  `
+  let jsonObj
+
+  if (xmlFiles.length > 0) {
+    const fileName = xmlFiles[0].name
+    const xmlData = await ftp.read(fileName)
+    jsonObj = parse(xmlData)
+    await ftp.delete(fileName)
+  }
 
   ftp.end()
-
-  const jsonObj = parse(xmlData)
 
   return jsonObj
 }
