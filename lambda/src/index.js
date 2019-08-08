@@ -1,7 +1,12 @@
 
 import { parse } from 'fast-xml-parser'
+import FTP from './utils/ftp'
 
 export async function handler (event) {
+
+  const ftp = await FTP()
+  const results = await ftp.list('/')
+  console.log(results)
 
   const xmlData = `
     <?xml version="1.0" encoding="UTF-8"?>
@@ -18,6 +23,8 @@ export async function handler (event) {
       </user>
     </users>
   `
+
+  ftp.end()
 
   const jsonObj = parse(xmlData)
 
