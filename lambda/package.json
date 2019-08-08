@@ -4,6 +4,7 @@
   "description": "Example lambda fuction",
   "main": "src/index.js",
   "scripts": {
+    "preinstall": "pip install awscli || (echo '\n\n>>> You need python to install awscli\n\n' && false)",
     "clean": "rm -rf build/ && mkdir build/",
     "prebuild": "npm run clean",
     "build": "webpack-cli",
