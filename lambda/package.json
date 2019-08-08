@@ -1,0 +1,13 @@
+{
+  "name": "aws-playground-lambda",
+  "version": "1.0.0",
+  "description": "Example lambda fuction",
+  "main": "src/index.js",
+  "scripts": {
+    "build": "zip -r build/function.zip src/",
+    "deploy": "aws lambda update-function-code --function-name test-lambda --zip-file fileb://build/function.zip",
+    "predeploy": "npm run build"
+  },
+  "author": "joaogsleite",
+  "license": "ISC"
+}
