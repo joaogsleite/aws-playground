@@ -6,13 +6,22 @@
   "scripts": {
     "clean": "rm -rf build/ && mkdir build/",
     "prebuild": "npm run clean",
-    "build": "zip -r ./build/function.zip ./index.js src/ node_modules/",
-    "predeploy": "npm run build",
-    "deploy": "aws lambda update-function-code --function-name test-lambda --zip-file fileb://build/function.zip"
+    "build": "webpack-cli",
+    "prezip": "npm run build",
+    "zip": "zip -r -j ./build/function.zip ./build/index.js",
+    "predeploy": "npm run zip",
+    "deploy": "aws lambda update-function-code --function-name test-lambda --zip-file fileb://build/function.zip",
+    "pretest": "npm run build",
+    "test": "lambda-local -l ./build/index.js -h handler -e ./test/event1.js"
   },
   "author": "joaogsleite",
   "license": "ISC",
   "dependencies": {
     "fast-xml-parser": "^3.12.19"
+  },
+  "devDependencies": {
+    "lambda-local": "^1.6.3",
+    "webpack": "^4.39.1",
+    "webpack-cli": "^3.3.6"
   }
 }

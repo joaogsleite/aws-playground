@@ -1,7 +1,7 @@
 
-const { parse } = require('fast-xml-parser')
+import { parse } from 'fast-xml-parser'
 
-exports.handler = async (event) => {
+export async function handler (event) {
 
   const xmlData = `
     <?xml version="1.0" encoding="UTF-8"?>
